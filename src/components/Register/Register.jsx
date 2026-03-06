@@ -44,7 +44,7 @@ const Register = () => {
 
         try {
             const data = await api.register({ name, email, password, photoURL });
-            if (res.ok) {
+            if (data && !data.error) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 toast.success('Registration successful!');
@@ -53,7 +53,7 @@ const Register = () => {
                 setError(data.error || 'Registration failed');
             }
         } catch (error) {
-            setError('Registration error');
+            setError(error?.message || 'Registration error');
         }
     };
 
@@ -63,7 +63,7 @@ const Register = () => {
             const result = await googleSignIn();
             const { email, displayName, photoURL } = result.user;
             const data = await api.googleLogin({ email, name: displayName, photoURL });
-            if (res.ok) {
+            if (data && !data.error) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 toast.success('Registration successful!');
@@ -72,7 +72,7 @@ const Register = () => {
                 setError(data.error || 'Google login failed');
             }
         } catch (err) {
-            setError('Google sign-in failed');
+            setError(err?.message || 'Google sign-in failed');
         }
     };
 
