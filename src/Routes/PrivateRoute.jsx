@@ -7,7 +7,7 @@ const PrivateRoute = ({ children }) => {
     const location = useLocation();
 
     if (loading) {
-        return <span className="loading loading-infinity loading-xl"></span>; // Loading spinner
+        return <span className="loading loading-infinity loading-xl"></span>; 
     }
 
     if (!user) {
