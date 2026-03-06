@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../api';
 import NavBar from './NavBar/NavBar';
 import Footer from './Footer/Footer';
 import toast from 'react-hot-toast';
@@ -36,38 +37,26 @@ function AddTutor() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('https://tutor-connect-backend-zoji.onrender.com/api/tutorials', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          image: form.image,
-          language: form.language,
-          price: Number(form.price),
-          description: form.description,
-        }),
+      await api.addTutorial({
+        name: form.name,
+        email: form.email,
+        image: form.image,
+        language: form.language,
+        price: Number(form.price),
+        description: form.description,
+      }, token);
+      toast.success('Tutorial added successfully!');
+      setForm({
+        name: '',
+        email: '',
+        image: '',
+        language: '',
+        price: '',
+        description: '',
+        review: 0,
       });
-      const data = await res.json();
-      if (res.ok) {
-        toast.success('Tutorial added successfully!');
-        setForm({
-          name: '',
-          email: '',
-          image: '',
-          language: '',
-          price: '',
-          description: '',
-          review: 0,
-        });
-      } else {
-        toast.error(data.error || 'Failed to add tutorial');
-      }
     } catch (err) {
-      toast.error('Server error');
+      toast.error('Failed to add tutorial.');
     }
     setLoading(false);
   };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { api } from '../api';
 import Footer from './Footer/Footer';
 import NavBar from './NavBar/NavBar';
 
@@ -18,7 +19,7 @@ function MyTutorials() {
     return document.documentElement.getAttribute('data-theme') === 'light';
   });
 
-  const API_BASE = import.meta.env.VITE_API_BASE || 'https://tutor-connect-backend-zoji.onrender.com/';
+  // API_BASE is now handled by centralized api
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -36,14 +37,7 @@ function MyTutorials() {
       setLoading(false);
       return;
     }
-    fetch(`https://tutor-connect-backend-zoji.onrender.com/api/my-tutorials?email=${encodeURIComponent(user.email)}`)
-      .then(async res => {
-        if (!res.ok) {
-          const data = await res.json();
-          throw new Error(data.error || 'Unauthorized');
-        }
-        return res.json();
-      })
+    api.getMyTutorials(user.email)
       .then(data => {
         setTutorials(data);
         setLoading(false);
@@ -57,9 +51,7 @@ function MyTutorials() {
   // Delete tutorial
   const handleDelete = async (id) => {
     const user = JSON.parse(localStorage.getItem('user'));
-    await fetch(`${API_BASE}/api/tutorials/${id}?email=${encodeURIComponent(user.email)}`, {
-      method: 'DELETE',
-    });
+    await api.deleteTutorial(id, user.email);
     setTutorials(tutorials.filter(t => t._id !== id));
   };
 
@@ -83,13 +75,7 @@ function MyTutorials() {
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem('user'));
-    await fetch(`${API_BASE}/api/tutorials/${editId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ...editData, email: user.email }),
-    });
+    await api.updateTutorial(editId, { ...editData, email: user.email });
     setTutorials(tutorials.map(t =>
       t._id === editId ? { ...t, ...editData } : t
     ));

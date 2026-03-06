@@ -13,7 +13,7 @@
     "@tailwindcss/vite": "^4.1.4",
     "aos": "^2.3.4",
     "dotenv": "^16.5.0",
-    "firebase": "^11.6.1",
+    "firebase": "^12.10.0",
     "lottie-react": "^2.4.1",
     "react": "^19.0.0",
     "react-awesome-reveal": "^4.3.1",
@@ -27,9 +27,8 @@
     "react-toastify": "^11.0.5",
     "react-toggle-dark-mode": "^1.1.1",
     "sweetalert2": "^11.21.2",
-    "swiper": "^11.2.6",
-    "tailwindcss": "^4.1.4",
-    "use-dark-mode": "^2.3.1"
+    "swiper": "^12.1.2",
+    "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

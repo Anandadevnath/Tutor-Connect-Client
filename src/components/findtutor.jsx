@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { api } from '../api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Footer from './Footer/Footer';
 import NavBar from './NavBar/NavBar';
@@ -17,20 +18,19 @@ function FindTutor() {
   const selectedLanguage = params.get('language');
 
   useEffect(() => {
-    fetch('https://tutor-connect-backend-zoji.onrender.com/api/tutorials')
-      .then(res => res.json())
-      .then(data => {
-        setTutors(data);
-        if (selectedLanguage) {
-          setFiltered(
-            data.filter(
-              t => t.language && t.language.toLowerCase() === selectedLanguage.toLowerCase()
-            )
-          );
-        } else {
-          setFiltered(data);
-        }
-      });
+        api.getTutorials()
+          .then(data => {
+            setTutors(data);
+            if (selectedLanguage) {
+              setFiltered(
+                data.filter(
+                  t => t.language && t.language.toLowerCase() === selectedLanguage.toLowerCase()
+                )
+              );
+            } else {
+              setFiltered(data);
+            }
+          });
   }, [selectedLanguage]);
 
   useEffect(() => {

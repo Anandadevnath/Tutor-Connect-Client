@@ -5,6 +5,7 @@ import NavBar from './NavBar/NavBar';
 import { FaStar, FaUsers, FaClock, FaArrowLeft, FaMapMarkerAlt } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { api } from '../api';
 
 const FindTutorDetails = () => {
     const { id } = useParams();
@@ -16,12 +17,7 @@ const FindTutorDetails = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        fetch(`http://tutor-connect-backend-zoji.onrender.com/api/tutorials/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then(res => res.json())
+        api.getTutorialById(id, token)
             .then(data => setTutor(data))
             .catch(() => setTutor(null));
     }, [id]);
@@ -49,17 +45,10 @@ const FindTutorDetails = () => {
             tutorEmail: tutor.email,
             email: user.email,
         };
-        const res = await fetch('https://server-side-1-u7yq.onrender.com/api/bookings', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(bookingData),
-        });
-        if (res.ok) {
+        try {
+            await api.bookTutorial(bookingData, token);
             toast.success('Booking successful!');
-        } else {
+        } catch (err) {
             toast.error('You have already booked this tutor or an error occurred.');
         }
     };

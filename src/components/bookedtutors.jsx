@@ -3,6 +3,7 @@ import { FaStar } from 'react-icons/fa';
 import Footer from './Footer/Footer';
 import NavBar from './NavBar/NavBar';
 import { toast, ToastContainer } from 'react-toastify';
+import { api } from '../api';
 import 'react-toastify/dist/ReactToastify.css';
 
 function BookedTutors() {
@@ -23,10 +24,7 @@ function BookedTutors() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    fetch('https://tutor-connect-backend-zoji.onrender.com/api/my-bookings', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(res => res.json())
+    api.getMyBookings(token)
       .then(data => {
         setBookings(data);
         setReviewed({});
@@ -37,14 +35,10 @@ function BookedTutors() {
   // Use booking._id for per-booking review state
   const handleReview = async (bookingId, tutorId) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(`https://tutor-connect-backend-zoji.onrender.com/api/tutorials/${tutorId}/review`, {
-      method: 'PATCH',
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (res.ok) {
+    try {
+      await api.reviewTutorial(tutorId, token);
       toast.success('Review added successfully!');
-      setReviewed(prev => ({ ...prev, [bookingId]: true }));
-    } else {
+    } catch {
       toast.error('Failed to add review.');
     }
   };

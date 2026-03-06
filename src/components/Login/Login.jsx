@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import NavBar from './../NavBar/NavBar';
 import Footer from '../Footer/Footer';
 import { AuthContext } from '../../contexts/AuthContext';
+import { api } from '../../api';
 import toast from 'react-hot-toast';
 
 const Login = () => {
@@ -30,12 +31,7 @@ const Login = () => {
         const password = e.target.password.value;
 
         try {
-            const res = await fetch('http://tutor-connect-backend-zoji.onrender.com/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-            const data = await res.json();
+            const data = await api.login(email, password);
             if (res.ok) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
@@ -54,12 +50,7 @@ const Login = () => {
         try {
             const result = await googleSignIn();
             const { email, displayName, photoURL } = result.user;
-            const res = await fetch('https://tutor-connect-backend-zoji.onrender.com/api/google-login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, name: displayName, photoURL }),
-            });
-            const data = await res.json();
+            const data = await api.googleLogin({ email, name: displayName, photoURL });
             if (res.ok) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
