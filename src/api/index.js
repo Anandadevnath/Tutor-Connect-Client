@@ -1,5 +1,4 @@
-// API base URL
-const API_BASE = 'https://tutor-connect-backend-zoji.onrender.com';
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 // Generic fetch utility for API calls
 export async function apiFetch(path, options = {}) {

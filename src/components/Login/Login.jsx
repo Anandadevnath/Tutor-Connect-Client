@@ -32,7 +32,7 @@ const Login = () => {
 
         try {
             const data = await api.login(email, password);
-            if (res.ok) {
+            if (data && !data.error) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 toast.success('Login successful!');
@@ -41,7 +41,7 @@ const Login = () => {
                 setError(data.error || 'Login failed');
             }
         } catch (error) {
-            setError('Login error');
+            setError(error?.message || 'Login error');
         }
     };
 
@@ -51,7 +51,7 @@ const Login = () => {
             const result = await googleSignIn();
             const { email, displayName, photoURL } = result.user;
             const data = await api.googleLogin({ email, name: displayName, photoURL });
-            if (res.ok) {
+            if (data && !data.error) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 toast.success('Login successful!');
@@ -60,7 +60,7 @@ const Login = () => {
                 setError(data.error || 'Google login failed');
             }
         } catch (err) {
-            setError('Google sign-in failed');
+            setError(err?.message || 'Google sign-in failed');
         }
     };
 
