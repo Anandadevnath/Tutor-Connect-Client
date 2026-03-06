@@ -19,7 +19,7 @@ export const api = {
     deleteTutorial: (id, email) => apiFetch(`/api/tutorials/${id}?email=${encodeURIComponent(email)}`, { method: 'DELETE' }),
     // Bookings
     getMyBookings: (token) => apiFetch('/api/my-bookings', { headers: { Authorization: `Bearer ${token}` } }),
-    bookTutorial: (data, token) => apiFetch('https://server-side-1-u7yq.onrender.com/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(data) }),
+    bookTutorial: (data, token) => apiFetch('/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(data) }),
     reviewTutorial: (tutorId, token) => apiFetch(`/api/tutorials/${tutorId}/review`, { method: 'PATCH', headers: { Authorization: `Bearer ${token}` } }),
     // Auth
     login: (email, password) => apiFetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }),
